@@ -18,7 +18,7 @@ jobs:
         env:
           POSTGRES_DB: 'webapp'
           POSTGRES_USER: 'postgres'
-          POSTGRES_PASSWORD: 'password'
+          POSTGRES_PASSWORD: 'shubhi2304'
           POSTGRES_PORT: '5432'
           POSTGRES_HOST: 'localhost'
           DB_DIALECT: 'postgres'
