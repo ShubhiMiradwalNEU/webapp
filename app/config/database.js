@@ -7,5 +7,3 @@ const sequelize = new Sequelize('postgres', 'postgres', 'shubhi2304', {
 });
 
 module.exports = sequelize;
-
-

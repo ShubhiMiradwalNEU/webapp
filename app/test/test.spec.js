@@ -4,7 +4,7 @@ var request = require('supertest');
 
 var expect = chai.expect;
 
-describe('Healthz Endpoint Test', function () {
+describe('Healthz Test', function () {
   it('GET /healthz should return a 200 OK response', function (done) {
     request(app)
       .get('/healthz')
