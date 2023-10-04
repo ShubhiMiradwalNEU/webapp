@@ -17,11 +17,11 @@ jobs:
         image: 'postgres:latest'
         env:
           POSTGRES_DB: 'webapp'
-          POSTGRES_USER: 'postgres'
-          POSTGRES_PASSWORD: 'postgres'
-          POSTGRES_PORT: '5432'
-          POSTGRES_HOST: 'localhost'
-          DB_DIALECT: 'postgres'
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_PORT: ${{ secrets.POSTGRES_PORT }}
+          POSTGRES_HOST: ${{ secrets.POSTGRES_HOST }}
+          DB_DIALECT: ${{ secrets.DB_DIALECT }}
         ports:
           - '5432:5432'
         options: >-
@@ -31,8 +31,6 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x, 16.x, 18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
