@@ -6,9 +6,14 @@ const findByEmail =  (email) =>  {
     return  User.findOne({ where: { email: email } });
 }
 
+const findpassword=(email)=>
+{
+    return User.password= User.findOne({where: {email: email}});
+}
+
 const findUserfromassignmentid = (id) => {
     const Assignment= assignment.findOne({where: {id: id}});
     return  Assignment.user_id;
 
 }
-module.exports = {findByEmail, findUserfromassignmentid};
+module.exports = {findByEmail, findUserfromassignmentid, findpassword};
