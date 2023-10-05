@@ -2,7 +2,7 @@ const { response } = require("../app");
 const assignment = require("../model/assignment-model");
 const assignmentController = require('../controller/assignment-controller');
 const user = require('../model/user-model');
-const {findByEmail, findUserfromassignmentid, findpassword} = require('../services/user-service');
+const {findByEmail, findUserFromAssignmentId, findpassword,findassignment, findUserIdbyemail} = require('../services/user-service');
 const bcrypt = require('bcrypt');
 const userservice = require('../services/user-service');
 
@@ -21,6 +21,10 @@ const getAssignment = (req, res) => {
 
 const getAssignmentById = (req, res) => {
     assignment.findByPk(req.params.id).then((response) => {
+        if (!response) {
+            res.status(404).end();
+            return;
+        }
         const responseData = { ...response.toJSON() };
         delete responseData.user_id;
 
@@ -48,10 +52,7 @@ const createAssignment = async (req, res) => {
 
     if(!match)
     {
-        // console.log('passwordmismatch')
-        // console.log(password);
-        // console.log(authenticatedUser.password);
-        return res.status(401).end();
+        return res.status(403).end();
     }
     else{
         if(req.body.points>10||req.body.points<0 ||
@@ -88,32 +89,45 @@ const deleteAssignment = async (req, res) =>  {
     const[email, password]=decoded.split(':');
     const authenticatedUser = await findByEmail(email);
     if(!authenticatedUser){
-        return res.status(401).end();
+        
+        return res.status(403).end();
     }
 
     const match = await bcrypt.compare(password, authenticatedUser.password);
 
-
     if(!match)
     {
-        console.log(password);
-        console.log(authenticatedUser.password);
-        console.log("**************user**************")
         return res.status(401).end();
     }
 
     const assignmentID=req.params.id;
-    const user_idd=findUserfromassignmentid(assignmentID);
-    console.log(user_idd);
-    console.log(authenticatedUser.user_id);
+    const assignment_id=await findassignment(assignmentID);
 
-    if(authenticatedUser.user_id!=user_idd)
+    if(assignment_id==null)
     {
-        console.log("**************user**************")
-        return res.status(401).send({message: 'Forbidden'});
+        return res.status(404).json("No assignment found");
     }
-    else
+    if(assignmentID!=assignment_id.id)
     {
+        return res.status(404).json("No assignment found");
+    }
+    const user_idd=await findUserFromAssignmentId(assignmentID);
+    const UserId=await findUserIdbyemail(email)
+    console.log(UserId)
+    console.log("********");
+    console.log(user_idd)
+
+    if(UserId!=user_idd)
+    {
+        console.log("******")
+        return res.status(403).send({message: 'Unauthorized'});
+    }
+    
+    if(UserId==user_idd)
+    {
+        console.log(authenticatedUser.user_id);
+        console.log(user_idd);
+        console.log(assignmentID);
         assignment.destroy({
             where: {
                 id: req.params.id
@@ -122,51 +136,68 @@ const deleteAssignment = async (req, res) =>  {
             if (response === 0) {
                 res.status(404).end();
             } else {
-                res.status(200).end();
+                res.status(204).end();
             }
         }).catch((error) => {
             console.error('Error deleting assignment:', error);
         });
+    }
 }
-}
+
 
 const updateAssignment = async (req, res) => {
     const authorization = req.headers.authorization;
     if(!authorization)
     {
-        return res.status(401).send({message: 'Forbidden'});
+        return res.status(401).end();
     }
     const encoded=authorization.substring(6);
     const decoded=Buffer.from(encoded, 'base64').toString('ascii');
     const[email, password]=decoded.split(':');
     const authenticatedUser = await findByEmail(email);
     if(!authenticatedUser){
-        return res.status(401).send({message: 'Forbidden'});
+        
+        return res.status(403).end();
     }
+
     const match = await bcrypt.compare(password, authenticatedUser.password);
 
     if(!match)
     {
-        console.log(password);
-        console.log(authenticatedUser.password);
-        console.log("**************user**************")
-        return res.status(401).send({message: 'Forbidden'});
+        // console.log("******");
+        return res.status(403).end();
     }
 
     const assignmentID=req.params.id;
-    const user_idd=findUserfromassignmentid(assignmentID);
-    console.log(user_idd);
-    console.log(authenticatedUser.user_id);
+    const assignment_id=await findassignment(assignmentID);
 
-    if(authenticatedUser.user_id!=user_idd)
+    if(assignment_id==null)
     {
-        return res.status(401).send({message: 'Forbidden'});
+        return res.status(404).json("No assignment found");
     }
+    if(assignmentID!=assignment_id.id)
+    {
+        return res.status(404).json("No assignment found");
+    }
+
+    // const assignmentID=req.params.id;
+    const user_idd=await findUserFromAssignmentId(assignmentID);
+    const UserId=await findUserIdbyemail(email)
+    console.log(UserId)
+    console.log(user_idd)
+
+
+    if(UserId!=user_idd)
+    {
+        console.log("******")
+        return res.status(403).send({message: 'Unauthorized'});
+    }
+
     else
     {
         if(req.body.points>10||req.body.points<0)
         {
-            return res.status(403).end();
+            return res.status(400).end();
         }
         else{
             assignment.update({
@@ -183,7 +214,7 @@ const updateAssignment = async (req, res) => {
                 if (response[0] === 0) {
                     res.status(404).end();
                 } else {
-                    res.status(200).end();
+                    res.status(204).end();
                 }
             }).catch((error) => {
                 console.error('Error updating assignment:', error);
@@ -191,6 +222,7 @@ const updateAssignment = async (req, res) => {
     }
 }
 }
+
 
 module.exports =
 {    
