@@ -27,4 +27,8 @@ router.delete('/assignment/:id', (req,res)=>
     assignmentController.deleteAssignment(req, res);
 });
 
+router.patch('/assignment/:id', (req, res) => {
+    res.status(405).end();
+});
+
 module.exports = router;
