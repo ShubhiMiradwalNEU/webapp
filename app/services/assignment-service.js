@@ -108,6 +108,7 @@ const deleteAssignment = async (req, res) =>  {
         return res.status(404).json("No assignment found");
     }
     if(assignmentID!=assignment_id.id)
+
     {
         return res.status(404).json("No assignment found");
     }
@@ -145,6 +146,7 @@ const deleteAssignment = async (req, res) =>  {
 }
 
 
+
 const updateAssignment = async (req, res) => {
     const authorization = req.headers.authorization;
     if(!authorization)
@@ -157,7 +159,9 @@ const updateAssignment = async (req, res) => {
     const authenticatedUser = await findByEmail(email);
     if(!authenticatedUser){
         
+
         return res.status(401).end();
+
     }
 
     const match = await bcrypt.compare(password, authenticatedUser.password);
@@ -165,11 +169,13 @@ const updateAssignment = async (req, res) => {
     if(!match)
     {
         // console.log("******");
+
         return res.status(401).end();
     }
 
     const assignmentID=req.params.id;
     const assignment_id=await findassignment(assignmentID);
+
 
     if(assignment_id==null)
     {
@@ -192,6 +198,7 @@ const updateAssignment = async (req, res) => {
         console.log("******")
         return res.status(403).send({message: 'Unauthorized'});
     }
+
 
     else
     {
