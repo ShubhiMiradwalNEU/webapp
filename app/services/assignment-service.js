@@ -60,7 +60,7 @@ const createAssignment = async (req, res) => {
             'assignment_updated' in req.body 
             )
         {
-            return res.status(403).end();
+            return res.status(400).end();
         }
         else{
             const assignment1 = await assignment.create({
@@ -73,7 +73,7 @@ const createAssignment = async (req, res) => {
             const responseData = { ...assignment1.toJSON() };
             delete responseData.user_id;
 
-            res.status(200).json({ data: responseData });
+            res.status(201).json({ data: responseData });
     }
 }
 };
@@ -157,7 +157,7 @@ const updateAssignment = async (req, res) => {
     const authenticatedUser = await findByEmail(email);
     if(!authenticatedUser){
         
-        return res.status(403).end();
+        return res.status(401).end();
     }
 
     const match = await bcrypt.compare(password, authenticatedUser.password);
@@ -165,7 +165,7 @@ const updateAssignment = async (req, res) => {
     if(!match)
     {
         // console.log("******");
-        return res.status(403).end();
+        return res.status(401).end();
     }
 
     const assignmentID=req.params.id;
@@ -195,7 +195,10 @@ const updateAssignment = async (req, res) => {
 
     else
     {
-        if(req.body.points>10||req.body.points<0)
+        if(req.body.points>10||req.body.points<0 ||
+            'assignment_created' in req.body || 
+            'assignment_updated' in req.body 
+            )
         {
             return res.status(400).end();
         }
