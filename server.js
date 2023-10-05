@@ -4,6 +4,7 @@ const fs = require('fs');
 const csvParser = require('csv-parser');
 const User = require('./app/model/user-model');
 const app = require('./app/app.js');
+const bcrypt = require('bcrypt');
 
 async function db_main() {
   try {
@@ -19,12 +20,18 @@ async function db_main() {
     fs.createReadStream('users.csv')
       .pipe(csvParser())
       .on('data', async (row) => {
-        await User.create({
-          first_name: row.first_name,
-          last_name: row.last_name,
-          email: row.email,
-          password: row.password
-        });
+        try {
+          const hashedPassword = await bcrypt.hash(String(row.password), 10);
+            User.create({
+            first_name: row.first_name,
+            last_name: row.last_name,
+            email: row.email,
+            password: hashedPassword
+          });
+        } catch (error) {
+          console.error('Error hashing password:', error);
+        }        
+
       })
       .on('end', () => {
         console.log('Users have been added from users.csv to the database.');
