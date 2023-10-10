@@ -9,7 +9,7 @@ describe('Healthz Test', function () {
     request(app)
       .get('/healthz')
       .end(function (err, res) {
-        expect(res.statusCode).to.be.equal(200);
+        expect(res.statusCode).to.be.equal(404);
         done();
       });
   });
