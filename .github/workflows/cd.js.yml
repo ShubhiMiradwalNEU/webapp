@@ -28,10 +28,6 @@ jobs:
       - name: Packer Init
         run: packer init ./packer/aws-ubuntu.pkr.hcl
 
-      - name: Packer Build - Branches
-        if: startsWith(github.ref, 'refs/heads/')
-        run: packer build --var-file=./packer/variables.pkrvars.hcl ./packer/aws-ubuntu.pkr.hcl
-
       - name: Packer Build
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
