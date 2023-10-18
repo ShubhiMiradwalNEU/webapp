@@ -42,7 +42,7 @@ build {
 
 
   provisioner "shell" {
-    scripts = ["script.sh"]
+    scripts = "script.sh"
   }
 
   provisioner "file" {
