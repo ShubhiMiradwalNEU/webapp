@@ -40,14 +40,13 @@ build {
   name    = "learn-packer"
   sources = ["source.amazon-ebs.my_ami"]
 
-
-  provisioner "shell" {
-    scripts = "script.sh"
-  }
-
   provisioner "file" {
     destination = "/home/admin/"
     source      = "./webapp.zip"
+  }
+
+    provisioner "shell" {
+    scripts = ["script.sh"]
   }
 }
 
