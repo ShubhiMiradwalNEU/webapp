@@ -31,6 +31,7 @@ source "amazon-ebs" "my_ami" {
   region        = "${var.aws_region}"
   source_ami    = "${var.source_ami}"
   ami_users     = ["553820382563"]
+
   ssh_username = "admin"
 }
 
