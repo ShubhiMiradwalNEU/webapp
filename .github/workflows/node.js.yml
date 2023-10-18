@@ -4,8 +4,6 @@
 name: Node.js CI
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
@@ -53,8 +51,8 @@ jobs:
       with:
         packer_version: "1.7.4"
 
-    - name: Package zip
-      run: cd ../ && zip -r webapp.zip webapp && cd - && cp ../webapp.zip .
+    # - name: Package zip
+    #   run: cd ../ && zip -r webapp.zip webapp && cd - && cp ../webapp.zip .
 
     - name: Run `packer init`
       id: init
