@@ -45,3 +45,25 @@ jobs:
             npm ci
             npm run build --if-present
             npm test
+
+
+    - name: Setup `packer`
+      uses: hashicorp/setup-packer@main
+      id: setup-packer
+      with:
+        packer_version: "1.7.4"
+
+    - name: Package zip
+      run: cd ../ && zip -r webapp.zip webapp && cd - && cp ../webapp.zip .
+
+    - name: Run `packer init`
+      id: init
+      run: "packer init ./packer/aws-ubuntu.pkr.hcl"
+
+    - name: Run `packer fmt`
+      id: fmt
+      run: "packer fmt ./packer/aws-ubuntu.pkr.hcl"
+      
+    - name: Run `packer validate`
+      id: validate
+      run: "packer validate ./packer/aws-ubuntu.pkr.hcl"
