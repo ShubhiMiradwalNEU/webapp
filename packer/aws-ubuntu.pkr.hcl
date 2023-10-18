@@ -32,7 +32,6 @@ source "amazon-ebs" "my_ami" {
   source_ami    = "${var.source_ami}"
   ami_users     = ["553820382563"]
 
-
   ssh_username = "admin"
 }
 
@@ -58,8 +57,6 @@ provisioner "shell" {
     "sudo npm install -g sequelize-cli",
     "npm install express --save",
     "sudo -u postgres psql -c \"ALTER USER postgres WITH PASSWORD 'shubhi2304';\"",
-    "sudo -i -u postgres psql -c \"GRANT ALL PRIVILEGES ON DATABASE accounts TO postgres;\"",
-    "sudo -i -u postgres psql -c \"GRANT ALL ON SCHEMA public TO postgres;\"",
     "npm init -y"
   ]
 }
