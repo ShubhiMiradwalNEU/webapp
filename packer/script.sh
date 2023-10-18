@@ -12,4 +12,3 @@ sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'shubhi2304';"
 sudo -i -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE accounts TO postgres;"
 sudo -i -u postgres psql -c "GRANT ALL ON SCHEMA public TO postgres;"
 npm init -y
-exit 0
