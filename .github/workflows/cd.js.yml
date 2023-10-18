@@ -1,0 +1,46 @@
+name: CD.js CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ami_build:
+    name: AMI Build
+    runs-on: ubuntu-latest
+    outputs:
+      AMI_ID: ${{ steps.GET_AMI.outputs.AMI_ID }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Package webapp
+        run: |
+          cd ..
+          zip -r webapp.zip webapp
+          mv webapp.zip $GITHUB_WORKSPACE
+        shell: bash
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
+          aws-region: us-east-1
+
+      - name: Packer Init
+        run: packer init ./packer/aws-ubuntu.pkr.hcl
+
+      - name: Packer Build - Branches
+        if: startsWith(github.ref, 'refs/heads/')
+        run: packer build --var-file=./packer/variables.pkrvars.hcl ./packer/aws-ubuntu.pkr.hcl
+
+      - name: Packer Build
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
+        run: packer build ./packer/aws-ubuntu.pkr.hcl
