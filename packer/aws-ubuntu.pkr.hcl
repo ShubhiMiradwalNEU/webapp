@@ -25,8 +25,8 @@ variable "ami-prefix" {
 }
 
 source "amazon-ebs" "my_ami" {
-  
-  ami_name        = "${var.ami-prefix}-${local.timestamp}"
+
+  ami_name      = "${var.ami-prefix}-${local.timestamp}"
   instance_type = "t2.micro"
   region        = "${var.aws_region}"
   source_ami    = "${var.source_ami}"
@@ -41,14 +41,13 @@ build {
   sources = ["source.amazon-ebs.my_ami"]
 
 
-provisioner "shell" {
+  provisioner "shell" {
     scripts = ["./script.sh"]
-}
+  }
 
-
-provisioner "file"{
+  provisioner "file" {
     destination = "/home/admin/"
-    source = "./webapp.zip"
-}
+    source      = "./webapp.zip"
+  }
 }
 
