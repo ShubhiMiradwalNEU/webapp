@@ -24,13 +24,19 @@ variable "ami-prefix" {
   default = "webapp"
 }
 
+variable "ami_users"{
+  type = list(string)
+  default = ["553820382563"]
+}
+
+
 source "amazon-ebs" "my_ami" {
 
   ami_name      = "${var.ami-prefix}-${local.timestamp}"
   instance_type = "t2.micro"
   region        = "${var.aws_region}"
   source_ami    = "${var.source_ami}"
-  ami_users     = ["553820382563"]
+  ami_users     = "${var.ami_users}"
 
   ssh_username = "admin"
 }
