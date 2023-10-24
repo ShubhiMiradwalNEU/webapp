@@ -67,7 +67,5 @@ build {
       "sudo -u postgres psql -c \"ALTER USER postgres WITH PASSWORD 'shubhi2304';\"",
     ]
 
-  }
-
 }
 
