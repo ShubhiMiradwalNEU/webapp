@@ -18,10 +18,10 @@ const sequelize = new Sequelize(database, username, password, {
   port: port,
   dialect: dialect,
   dialectOptions: {
-    ssl: {
-      require: false, // This will help you. But you will see nwe error
-      rejectUnauthorized: false // This line will fix new error
-    }
+    // ssl: {
+    //   require: false, // This will help you. But you will see nwe error
+    //   rejectUnauthorized: false // This line will fix new error
+    // }
   }
 });
 
