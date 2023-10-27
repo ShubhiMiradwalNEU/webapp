@@ -24,8 +24,13 @@ variable "ami-prefix" {
   default = "webapp"
 }
 
+<<<<<<< HEAD
 variable "ami_users" {
   type    = list(string)
+=======
+variable "ami_users"{
+  type = list(string)
+>>>>>>> cc6b5ec34c3f9cac433d42574f0f80c16b12919b
   default = ["553820382563"]
 }
 
