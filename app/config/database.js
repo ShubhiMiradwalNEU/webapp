@@ -11,6 +11,8 @@ const host = process.env.DB_HOSTNAME || 'localhost';
 const port = process.env.DB_PORT || 5432;
 const dialect = process.env.DB_DIALECT || 'postgres';
 
+console.log({username,password,database,host, port, dialect})
+
 const sequelize = new Sequelize(database, username, password, {
   host: host,
   port: port,
