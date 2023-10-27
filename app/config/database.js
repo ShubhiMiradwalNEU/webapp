@@ -12,6 +12,7 @@ const port = process.env.DB_PORT || 5432;
 const dialect = process.env.DB_DIALECT || 'postgres';
 
 
+
 console.log({username,password,database,host, port, dialect})
 let sequelize = null;
 // const sequelize = new Sequelize(database, username, password, {
@@ -46,5 +47,9 @@ else{
     dialect: dialect, 
   });
 }
+
+console.log({username,password,database,host, port, dialect})
+
+
 
 module.exports = sequelize;
