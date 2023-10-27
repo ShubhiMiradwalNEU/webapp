@@ -3,8 +3,9 @@ const fs = require('fs');
 require('dotenv').config();
 
 
+
 const username = process.env.DB_USER || 'postgres';
-const password = process.env.DB_PASSWORD || 'shubhi2304';
+const password = process.env.DB_PASSWORD || 'postgres';
 const database = process.env.DB_NAME || 'postgres';
 const host = process.env.DB_HOSTNAME || 'localhost';
 
