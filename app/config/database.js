@@ -11,18 +11,40 @@ const host = process.env.DB_HOSTNAME || 'localhost';
 const port = process.env.DB_PORT || 5432;
 const dialect = process.env.DB_DIALECT || 'postgres';
 
-console.log({username,password,database,host, port, dialect})
 
-const sequelize = new Sequelize(database, username, password, {
-  host: host,
-  port: port,
-  dialect: dialect,
-  dialectOptions: {
-    // ssl: {
-    //   require: false, // This will help you. But you will see nwe error
-    //   rejectUnauthorized: false // This line will fix new error
-    // }
-  }
-});
+console.log({username,password,database,host, port, dialect})
+let sequelize = null;
+// const sequelize = new Sequelize(database, username, password, {
+//   host: host,
+//   port: port,
+//   dialect: dialect,
+//   dialectOptions: {
+//   ssl: {
+//       require: false, // This will help you. But you will see nwe error
+//       rejectUnauthorized: false // This line will fix new error
+//     }
+//   }
+// });
+var isSSL = process.env.IS_SSL || false;
+if (isSSL){
+    sequelize = new Sequelize(database, username, password, {
+      host: host,
+      port: port,
+      dialect: dialect,
+      dialectOptions: {
+      ssl: {
+          require: true, // This will help you. But you will see nwe error
+          rejectUnauthorized: false // This line will fix new error
+        }
+      }
+    });
+}
+else{
+  sequelize = new Sequelize(database, username, password, {
+    host: host,
+    port: port,
+    dialect: dialect, 
+  });
+}
 
 module.exports = sequelize;
