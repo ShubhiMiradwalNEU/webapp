@@ -50,9 +50,7 @@ build {
     source      = "../webapp.zip"
     generated   = true
   }
-
   provisioner "shell" {
-    
     
     inline = [
       "#!/bin/bash",
