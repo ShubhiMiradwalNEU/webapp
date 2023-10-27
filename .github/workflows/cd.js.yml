@@ -25,6 +25,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
           aws-region: us-west-2
 
+
       - name: Packer Init
         run: packer init ./packer/aws-ubuntu.pkr.hcl
 
