@@ -49,11 +49,9 @@ build {
     destination = "/home/admin/"
     source      = "../webapp.zip"
     generated   = true
-
   }
-
-
   provisioner "shell" {
+    
     inline = [
       "#!/bin/bash",
       "sudo apt-get update",
