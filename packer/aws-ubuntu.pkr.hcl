@@ -49,12 +49,10 @@ build {
     destination = "/home/admin/"
     source      = "../webapp.zip"
     generated   = true
+
   }
-  provisioner "file" {
-    destination = "/tmp/webapp.service"
-    source      = "../webapp.zip"
-    generated   = true
-  }
+
+
   provisioner "shell" {
     inline = [
       "#!/bin/bash",
@@ -65,15 +63,15 @@ build {
       "sudo groupadd group",
       "sudo useradd -s /bin/false -g group -d /opt/user -m user",
       "sudo apt-get install -y nodejs npm",
-      // "sudo apt-get install -y postgresql postgresql-contrib",
       "npm install sequelize --save",
       "sudo npm install -g sequelize-cli",
       "npm install express --save",
       "cd service",
       "sudo cp webapp.service /usr/lib/systemd/system/webapp.service",
+      "sudo systemctl enable webapp",
       "sudo systemctl daemon-reload",
-      "sudo systemctl enable webapp.service",
-      "sudo systemctl start webapp.service",
+      "sudo systemctl stop webapp",
+      "sudo systemctl start webapp",
     ]
   }
 }
