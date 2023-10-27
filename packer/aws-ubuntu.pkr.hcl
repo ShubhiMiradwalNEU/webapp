@@ -52,6 +52,8 @@ build {
   }
 
   provisioner "shell" {
+    
+    
     inline = [
       "#!/bin/bash",
       "sudo apt-get update",
