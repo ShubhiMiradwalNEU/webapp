@@ -57,7 +57,8 @@ const createAssignment = async (req, res) => {
     else{
         if(req.body.points>10||req.body.points<0 ||
             'assignment_created' in req.body || 
-            'assignment_updated' in req.body 
+            'assignment_updated' in req.body ||
+            !Number.isInteger(req.body.points) 
             )
         {
             return res.status(400).end();
@@ -158,18 +159,13 @@ const updateAssignment = async (req, res) => {
     const[email, password]=decoded.split(':');
     const authenticatedUser = await findByEmail(email);
     if(!authenticatedUser){
-        
-
         return res.status(401).end();
-
     }
 
     const match = await bcrypt.compare(password, authenticatedUser.password);
 
     if(!match)
     {
-        // console.log("******");
-
         return res.status(401).end();
     }
 
@@ -204,7 +200,8 @@ const updateAssignment = async (req, res) => {
     {
         if(req.body.points>10||req.body.points<0 ||
             'assignment_created' in req.body || 
-            'assignment_updated' in req.body 
+            'assignment_updated' in req.body ||
+            !Number.isInteger(req.body.points)
             )
         {
             return res.status(400).end();
