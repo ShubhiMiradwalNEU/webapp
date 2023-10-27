@@ -1,9 +1,28 @@
 const { Sequelize } = require('sequelize');
+const fs = require('fs');
+require('dotenv').config();
 
-const sequelize = new Sequelize('postgres', 'postgres', 'shubhi2304', {
-  host: 'localhost',
-  port: 5432,
-  dialect: 'postgres',
+
+const username = process.env.DB_USER || 'postgres';
+const password = process.env.DB_PASSWORD || 'shubhi2304';
+const database = process.env.DB_NAME || 'postgres';
+const host = process.env.DB_HOSTNAME || 'localhost';
+
+const port = process.env.DB_PORT || 5432;
+const dialect = process.env.DB_DIALECT || 'postgres';
+
+console.log({username,password,database,host, port, dialect})
+
+const sequelize = new Sequelize(database, username, password, {
+  host: host,
+  port: port,
+  dialect: dialect,
+  dialectOptions: {
+    // ssl: {
+    //   require: false, // This will help you. But you will see nwe error
+    //   rejectUnauthorized: false // This line will fix new error
+    // }
+  }
 });
 
 module.exports = sequelize;

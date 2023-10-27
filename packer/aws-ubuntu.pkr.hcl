@@ -24,8 +24,8 @@ variable "ami-prefix" {
   default = "webapp"
 }
 
-variable "ami_users"{
-  type = list(string)
+variable "ami_users" {
+  type    = list(string)
   default = ["553820382563"]
 }
 
@@ -48,11 +48,13 @@ build {
   provisioner "file" {
     destination = "/home/admin/"
     source      = "../webapp.zip"
-    generated =true
+    generated   = true
   }
-
-
-
+  provisioner "file" {
+    destination = "/tmp/webapp.service"
+    source      = "../webapp.zip"
+    generated   = true
+  }
   provisioner "shell" {
     inline = [
       "#!/bin/bash",
@@ -60,15 +62,17 @@ build {
       "sudo apt-get install -y unzip",
       "unzip webapp.zip",
       "cd webapp",
+      "sudo groupadd group",
+      "sudo useradd -s /bin/false -g group -d /opt/user -m user",
       "sudo apt-get install -y nodejs npm",
-      "sudo apt-get install -y postgresql postgresql-contrib",
+      // "sudo apt-get install -y postgresql postgresql-contrib",
       "npm install sequelize --save",
       "sudo npm install -g sequelize-cli",
       "npm install express --save",
       "sudo -u postgres psql -c \"ALTER USER postgres WITH PASSWORD 'shubhi2304';\"",
+     "cd service",
+      "sudo cp webapp.service /usr/lib/systemd/system/webapp.service",
       "sudo systemctl daemon-reload",
-      "cd service",
-      "sudo cp webapp.service /lib/systemd/system",
       "sudo systemctl enable webapp.service",
       "sudo systemctl start webapp.service",
     ]

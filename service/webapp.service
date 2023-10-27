@@ -1,12 +1,14 @@
 [Unit]
 Description=app
-After=network.target
+After=cloud-final.service
 
 [Service]
-Environment=NODE_PORT=8080
 Type=simple
-User=admin
+User=user
+WorkingDirectory=/home/admin/webapp/
 ExecStart=/usr/bin/node /home/admin/webapp/server.js
+StandardOutput=append:/var/log/webapp.log
+StandardError=append:/var/log/webapp-error.log
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=cloud-init.target
