@@ -3,6 +3,7 @@ const fs = require('fs');
 require('dotenv').config();
 
 
+
 const username = process.env.DB_USER || 'postgres';
 const password = process.env.DB_PASSWORD || 'shubhi2304';
 const database = process.env.DB_NAME || 'postgres';
@@ -35,5 +36,8 @@ else{
     dialect: dialect, 
   });
 }
+
+
+
 
 module.exports = sequelize;
