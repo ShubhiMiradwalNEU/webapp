@@ -1,10 +1,12 @@
 [Unit]
 Description=app
-After=cloud-final.service
+ConditionPathExists=/home/admin/webapp/
+After=cloud-init.target
 
 [Service]
 Type=simple
 User=user
+Group=group
 WorkingDirectory=/home/admin/webapp/
 ExecStart=/usr/bin/node /home/admin/webapp/server.js
 StandardOutput=append:/var/log/webapp.log

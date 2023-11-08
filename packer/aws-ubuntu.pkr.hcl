@@ -26,7 +26,7 @@ variable "ami-prefix" {
 
 variable "ami_users" {
   type    = list(string)
-  default = ["553820382563"]
+  default = ["553820382563","240210896617"]
 }
 
 
@@ -61,9 +61,10 @@ build {
       "cd webapp",
       "sudo groupadd group",
       "sudo useradd -s /bin/false -g group -d /opt/user -m user",
+      "sudo chmod -R 755 /home/admin/webapp",
       "sudo apt-get install -y nodejs npm",
       "npm install sequelize --save",
-      "sudo npm install -g sequelize-cli",
+      "sudo npm install -g sequelize-cli",  
       "npm install express --save",
       "cd service",
       "sudo cp webapp.service /usr/lib/systemd/system/webapp.service",
@@ -71,6 +72,21 @@ build {
       "sudo systemctl daemon-reload",
       "sudo systemctl stop webapp",
       "sudo systemctl start webapp",
+    ]
+  }
+
+    provisioner "shell" {
+    inline = [
+        "sudo mkdir -p /home/admin/webapp/logs",
+        "sudo touch /home/admin/webapp/logs/cloud-watch-webapp.log",
+        "sudo chmod 757 /home/admin/webapp/logs/cloud-watch-webapp.log",
+        "wget https://s3.amazonaws.com/amazoncloudwatch-agent/debian/amd64/latest/amazon-cloudwatch-agent.deb",
+        "wget https://amazoncloudwatch-agent-us-west-2.s3.us-west-2.amazonaws.com/debian/amd64/latest/amazon-cloudwatch-agent.deb",
+        "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",
+        "rm -f ./amazon-cloudwatch-agent.deb",
+        "sudo cp /home/admin/webapp/packer/amazon-cloudwatch-agent.json /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent.json",
+        "sudo cp /home/admin/webapp/packer/amazon-cloudwatch-agent.json /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json",  
+        "sudo systemctl daemon-reload",
     ]
   }
 }
