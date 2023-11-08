@@ -124,6 +124,7 @@ const createAssignment = async (req, res) => {
             !Number.isInteger(req.body.points) ||
             !Number.isInteger(req.body.points) ||
             !Number.isInteger(req.body.num_of_attempts)
+
             )
         {
             logger.error("points cannot accept string or number greater than 10 or less than 0 or float values")
@@ -240,7 +241,6 @@ const updateAssignment = async (req, res) => {
     const authenticatedUser = await findByEmail(email);
     if(!authenticatedUser){
         logger.info("Not an authorised user");
-
         return res.status(401).end();
     }
 
@@ -287,6 +287,7 @@ const updateAssignment = async (req, res) => {
         if(req.body.points>10||req.body.points<0 ||
             'assignment_created' in req.body || 
             'assignment_updated' in req.body ||
+
             !req.body.name ||
             !req.body.points ||
             !req.body.num_of_attempts ||
