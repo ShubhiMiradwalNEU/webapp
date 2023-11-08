@@ -117,6 +117,7 @@ const createAssignment = async (req, res) => {
         if(req.body.points>10||req.body.points<0 ||
             'assignment_created' in req.body || 
             'assignment_updated' in req.body ||
+
             !req.body.name ||
             !req.body.points ||
             !req.body.num_of_attempts ||
@@ -287,12 +288,14 @@ const updateAssignment = async (req, res) => {
         if(req.body.points>10||req.body.points<0 ||
             'assignment_created' in req.body || 
             'assignment_updated' in req.body ||
+
             !req.body.name ||
             !req.body.points ||
             !req.body.num_of_attempts ||
             !req.body.deadline ||
             !Number.isInteger(req.body.points) ||
             !Number.isInteger(req.body.num_of_attempts)
+
             )
         {
             return res.status(400).end();
