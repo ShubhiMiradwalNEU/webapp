@@ -11,7 +11,6 @@ const client = new StatsD({
 });
 
 
-
 router.get('/healthz', async (req, res) => {
 
   if (Object.keys(req.body).length > 0 || Object.keys(req.query).length > 0) {
@@ -32,9 +31,35 @@ router.get('/healthz', async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache');
       res.setHeader('Content-Length', '0');
       res.status(503).end();
+      logger.info("Get Request for healthz and it failed");
+
     }
   }
 });
+
+router.get('/healthzz', async (req, res) => {
+  if (Object.keys(req.body).length > 0 || Object.keys(req.query).length > 0) {
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Content-Length', '0');
+    res.status(400).end();
+  } else {
+    try {
+      await sequelize.authenticate();
+      console.log('Connection has been established successfully.');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Content-Length', '0');
+      res.status(200).end();
+    } catch (error) {
+      console.error('Unable to connect to the database:', error);
+      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Content-Length', '0');
+      res.status(503).end();
+      logger.info("Get Request for healthz and it failed");
+
+    }
+  }
+});
+
 
 router.get('*', (req, res) => {
 
