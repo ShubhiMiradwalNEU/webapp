@@ -10,6 +10,7 @@ const client = new StatsD({
   port: 8125
 });
 
+
 router.get('/healthz', async (req, res) => {
 
   if (Object.keys(req.body).length > 0 || Object.keys(req.query).length > 0) {
@@ -19,12 +20,12 @@ router.get('/healthz', async (req, res) => {
   } else {
     try {
       await sequelize.authenticate();
+      // logger.info("Get Request for healthz is called");
+      // client.increment("Get-Request-healthz")
       console.log('Connection has been established successfully.');
       res.setHeader('Cache-Control', 'no-cache');
       res.setHeader('Content-Length', '0');
       res.status(200).end();
-      logger.info("Get Request for healthz is called");
-      client.increment("Get-Request-healthz")
     } catch (error) {
       console.error('Unable to connect to the database:', error);
       res.setHeader('Cache-Control', 'no-cache');
