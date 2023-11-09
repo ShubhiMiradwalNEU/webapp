@@ -12,7 +12,6 @@ const findUserIdbyemail= async (email)=>
     return user_email.id
 }
 
-
 const findpassword=(email)=>
 {
     return User.password= User.findOne({where: {email: email}});

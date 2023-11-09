@@ -9,7 +9,7 @@ const database = process.env.DB_NAME || 'postgres';
 const host = process.env.DB_HOSTNAME || 'localhost';
 const port = process.env.DB_PORT || 5432;
 const dialect = process.env.DB_DIALECT || 'postgres';
-
+logging=true;
 
 console.log({username,password,database,host, port, dialect})
 let sequelize = null;
