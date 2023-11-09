@@ -78,8 +78,10 @@ build {
     provisioner "shell" {
     inline = [
         "sudo mkdir -p /home/admin/webapp/logs",
-        "sudo touch /home/admin/webapp/logs/cloud-watch-webapp.log",
-        "sudo chmod 757 /home/admin/webapp/logs/cloud-watch-webapp.log",
+
+        "sudo touch /home/admin/webapp/logs/webapp.log",
+        "sudo chmod 757 /home/admin/webapp/logs/webapp.log",
+
         "wget https://s3.amazonaws.com/amazoncloudwatch-agent/debian/amd64/latest/amazon-cloudwatch-agent.deb",
         "wget https://amazoncloudwatch-agent-us-west-2.s3.us-west-2.amazonaws.com/debian/amd64/latest/amazon-cloudwatch-agent.deb",
         "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",

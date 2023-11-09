@@ -8,7 +8,9 @@
             "files": {
                 "collect_list": [
                     {
-                        "file_path": "/home/admin/webapp/logs/cloud-watch-webapp.log",
+
+                        "file_path": "/home/admin/webapp/logs/webapp.log",
+
                         "log_group_name": "csye6225",
                         "log_stream_name": "webapp"
                     }
