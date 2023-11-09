@@ -239,7 +239,9 @@ const updateAssignment = async (req, res) => {
     const[email, password]=decoded.split(':');
     const authenticatedUser = await findByEmail(email);
     if(!authenticatedUser){
+
         logger.info("Not an authorised user");
+
 
         return res.status(401).end();
     }
