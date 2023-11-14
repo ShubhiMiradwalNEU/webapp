@@ -1,5 +1,7 @@
 # Web Application
 
+Assignment 7
+
 This repository contains a web application that provides RESTful API endpoints for managing assignments. 
 Assignment can be created by the authenticated user by present in the database and authenticated user only has the right to update and delete assignments
 Through Githubaction AMI is created and can be used for creating resources
