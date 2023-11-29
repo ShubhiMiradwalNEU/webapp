@@ -373,7 +373,11 @@ const submissionDetails = async (req, res) => {
         const UserId=await findUserIdbyemail(email)
         console.log(UserId)
         console.log(user_idd)
-    
+        const currDate = new Date();
+        if (currDate > assignment.deadline) {
+            logger.warn("Forbidden!! Its past deadline");
+            return res.status(403).json({error: "Forbidden!! Its post deadline"}).send();
+        }
     
         if(UserId!=user_idd)
         {
