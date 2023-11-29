@@ -19,12 +19,18 @@ const deleteAssignment = (req, res) => {
     assignmentService.deleteAssignment(req, res);
 }
 
+const submissionDetails=(req, res)=>
+{
+    assignmentService.submissionDetails(req, res);
+}
+
 module.exports = {
     postAssignment,
     getAssignment,
     getAssignmentById,
     updateAssignment,
-    deleteAssignment
+    deleteAssignment,
+    submissionDetails,
 }   
 
 
