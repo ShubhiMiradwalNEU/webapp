@@ -1,5 +1,7 @@
 const assignment = require('../model/assignment-model');
 const User = require('../model/user-model');
+const submission = require('../model/submission');
+const user = require('../model/user-model');
 
 const findByEmail =  (email) =>  {
     console.log(User);
@@ -33,4 +35,11 @@ const findUserFromAssignmentId =  async (id) => {
     }
 }
 
-module.exports = {findByEmail, findUserFromAssignmentId, findpassword,findUserIdbyemail, findassignment};
+ const getSubmissionById = async (user_id, assignment_id) => {
+        const submissions = await submission.findAll({
+            where: { user_id: user_id, assignment_id: assignment_id },
+        });
+        return submissions;
+        }
+
+module.exports = {findByEmail, findUserFromAssignmentId, findpassword,findUserIdbyemail, findassignment, getSubmissionById};

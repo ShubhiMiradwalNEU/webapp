@@ -56,13 +56,14 @@ build {
     inline = [
       "#!/bin/bash",
       "sudo apt-get update",
-      "sudo apt-get install -y unzip",
+      "sudo apt-get install -y unzip nodejs npm",
       "unzip webapp.zip",
       "cd webapp",
       "sudo groupadd group",
       "sudo useradd -s /bin/false -g group -d /opt/user -m user",
       "sudo chmod -R 755 /home/admin/webapp",
-      "sudo apt-get install -y nodejs npm",
+      "rm -rf node_modules",
+      "npm install",
       "npm install sequelize --save",
       "sudo npm install -g sequelize-cli",  
       "npm install express --save",
@@ -78,10 +79,8 @@ build {
     provisioner "shell" {
     inline = [
         "sudo mkdir -p /home/admin/webapp/logs",
-
         "sudo touch /home/admin/webapp/logs/webapp.log",
         "sudo chmod 757 /home/admin/webapp/logs/webapp.log",
-
         "wget https://s3.amazonaws.com/amazoncloudwatch-agent/debian/amd64/latest/amazon-cloudwatch-agent.deb",
         "wget https://amazoncloudwatch-agent-us-west-2.s3.us-west-2.amazonaws.com/debian/amd64/latest/amazon-cloudwatch-agent.deb",
         "sudo dpkg -i -E ./amazon-cloudwatch-agent.deb",

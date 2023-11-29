@@ -26,17 +26,14 @@ router.get('/healthz', async (req, res) => {
       res.setHeader('Cache-Control', 'no-cache');
       res.setHeader('Content-Length', '0');
       res.status(200).end();
-
       logger.info("Get Request for healthz is called");
       client.increment("Get-Request-healthz")
-
     } catch (error) {
       console.error('Unable to connect to the database:', error);
       res.setHeader('Cache-Control', 'no-cache');
       res.setHeader('Content-Length', '0');
       res.status(503).end();
       logger.info("Get Request for healthz and it failed");
-
     }
   }
 });
