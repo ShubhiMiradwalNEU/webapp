@@ -7,7 +7,7 @@ Assignment can be created by the authenticated user by present in the database a
 Through Githubaction AMI is created and can be used for creating resources
 
 
-## Installation Procedure
+## New Installation Procedure
 
 Follow these steps to install the required Node.js modules and dependencies for this application:
 
