@@ -402,6 +402,7 @@ const submissionDetails = async (req, res) => {
                 num_of_attempts:assignment.num_of_attempts,
                 assignment_id:req.params.id,
                 assignment_name:assignment.name,
+                submissionlength:submissions.length,
              }
 
              console.log("*******************");
