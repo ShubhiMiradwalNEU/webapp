@@ -12,8 +12,6 @@ const AWS = require('aws-sdk');
 require('dotenv').config();
 
 
-
-var count=0;
 const client = new StatsD({
     host: 'localhost',
     port: 8125
@@ -245,7 +243,6 @@ const updateAssignment = async (req, res) => {
     const authenticatedUser = await findByEmail(email);
     if(!authenticatedUser){
         logger.info("Not an authorised user");
-
         return res.status(401).end();
     }
 
