@@ -7,8 +7,13 @@ const bcrypt = require('bcrypt');
 const userservice = require('../services/user-service');
 const logger = require('../../logger');
 const StatsD = require('node-statsd');
+const submission = require("../model/submission");
+const AWS = require('aws-sdk');
+require('dotenv').config();
 
 
+
+var count=0;
 const client = new StatsD({
     host: 'localhost',
     port: 8125
@@ -323,6 +328,114 @@ const updateAssignment = async (req, res) => {
 }
 }
 
+const submissionDetails = async (req, res) => {
+    try {
+        const assignment_id = req.params.id;
+        const assignment = await findassignment(assignment_id);
+
+        console.log("*************")
+        console.log(assignment);
+        const authorization = req.headers.authorization;
+        const encoded=authorization.substring(6);
+        const decoded=Buffer.from(encoded, 'base64').toString('ascii');
+        const[email, password]=decoded.split(':');
+        const authenticatedUser = await findByEmail(email);
+
+        const submissions= await userservice.getSubmissionById(authenticatedUser.id, assignment_id);
+
+        console.log(submissions.length);
+        console.log(email);
+        console.log(authenticatedUser);
+        const match = await bcrypt.compare(password, authenticatedUser.password);
+        if(!assignment)
+        {    
+            return res.status(404).json("No assignment found");
+    
+        }
+        if(!authorization)
+        {
+            logger.info("Not an authorised user");
+            return res.status(401).end();
+        }
+        if(!assignment.id)
+        {    
+            return res.status(404).json("No assignment found");
+    
+        }
+
+        if(!match)
+        {
+            return res.status(401).end();
+        }
+        if(!req.body.submission_url)
+        {
+            return res.status(400).end();
+        }
+
+        const user_idd=await findUserFromAssignmentId(assignment_id);
+        const UserId=await findUserIdbyemail(email)
+        console.log(UserId)
+        console.log(user_idd)
+    
+    
+        if(UserId!=user_idd)
+        {
+            logger.info("Unauthorised user performing operation");
+    
+            return res.status(403).send({message: 'Unauthorized'});
+        }
+        else{
+
+        if (assignment.num_of_attempts > submissions.length) {
+            const response = await submission.create({
+                submission_url: req.body.submission_url,
+                assignment_id: assignment_id,
+                user_id: authenticatedUser.id,
+            });
+            AWS.config.update({ region: 'us-west-2' });
+
+            const sns = new AWS.SNS();
+             const message={
+                email:email,
+                submission_url:req.body.submission_url,
+                num_of_attempts:assignment.num_of_attempts,
+                assignment_id:req.params.id,
+                assignment_name:assignment.name,
+             }
+
+             console.log("*******************");
+
+             console.log(message);
+                    // const snsParams = {
+                    //     //TopicArn: process.env.SNS_TOPIC_ARN,
+                    //     TopicArn:"arn:aws:sns:us-west-2:553820382563:my-topic-ac91559",
+                    //     Message: JSON.stringify(message),
+                    // };
+                sns.publish({
+                        TopicArn: process.env.SNS_TOPIC_ARN,
+                        Message: JSON.stringify(message),
+                    }, (err, data) => {
+                        if (err) {
+                            //appLogger.error("Error publishing to SNS:", err);
+                            return res.status(500).send("Error submitting.", err);
+                        } else {
+                            //appLogger.info("Submission successful:", data);
+                            return res.status(201).send("Submission successful.");
+                        }
+                    });
+            // res.status(201).send();
+        } else {
+            res.status(400).end();
+        }
+    }
+}
+
+  catch (error) {
+        console.error('Error:', error);
+        res.status(500).end();
+    }
+};
+
 
 module.exports =
 {    
@@ -330,5 +443,6 @@ module.exports =
     createAssignment,
     updateAssignment,
     deleteAssignment,
-    getAssignmentById
+    getAssignmentById,
+    submissionDetails,
 }

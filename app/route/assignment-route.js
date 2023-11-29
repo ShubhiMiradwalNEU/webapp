@@ -38,4 +38,9 @@ router.patch('/assignment/:id', (req, res) => {
     res.status(405).end();
 });
 
+router.post('/assignment/:id/submission', (req, res) => {
+    assignmentController.submissionDetails(req, res);
+});
+
+
 module.exports = router;
