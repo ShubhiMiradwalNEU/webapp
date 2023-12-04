@@ -33,3 +33,38 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
         run: packer build ./packer/aws-ubuntu.pkr.hcl
+
+      - name: GET AMI ID
+        id: GET_AMI
+        run: |
+          AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
+          echo $AMI_ID
+          echo "AMI_ID=$AMI_ID" >> "$GITHUB_OUTPUT"
+  auto_deployement:
+    runs-on: ubuntu-latest
+    needs: [packer_build]
+    # environment: ${{vars.ENVIRONMENT}}
+    # if: ${{vars.IS_DEPLOY == 'true'}}
+    env:
+      AMI_ID: ${{needs.packer_build.outputs.AMI_ID || vars.AMI_ID}}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
+          aws-region: us-west-2
+      - name: Check AMI ID
+        run: echo $AMI_ID
+      - name: check aws version
+        run: "aws --version"
+      - name: refresh launchTemplate
+        run: |
+          aws ec2 create-launch-template-version --no-cli-pager \
+          --launch-template-data '{"ImageId":"${{env.AMI_ID}}"}' \
+          --source-version 1 --launch-template-name ${{vars.LAUNCH_TEMPLATE_NAME}}
+      - name: refresh autoscaling instance
+        run: |
+          aws autoscaling start-instance-refresh \
+          --auto-scaling-group-name="${{vars.AUTOSCALING_GROUP_NAME}}"

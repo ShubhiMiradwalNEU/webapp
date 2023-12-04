@@ -90,5 +90,8 @@ build {
         "sudo systemctl daemon-reload",
     ]
   }
+  post-processor "manifest" { 
+    output = "manifest.json"
+  }
 }
 
