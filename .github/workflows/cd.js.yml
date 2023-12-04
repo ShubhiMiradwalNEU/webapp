@@ -42,9 +42,9 @@ jobs:
           echo "AMI_ID=$AMI_ID" >> "$GITHUB_OUTPUT"
   auto_deployment:
     runs-on: ubuntu-latest
-    needs: [packer_build]
+    needs: [ami_build]
     env:
-      AMI_ID: ${{ needs.packer_build.outputs.AMI_ID || vars.AMI_ID }}
+      AMI_ID: ${{ needs.ami_build.outputs.AMI_ID || vars.AMI_ID }}
     steps:
       - uses: actions/checkout@v3
       - name: Configure AWS Credentials
@@ -69,3 +69,4 @@ jobs:
         run: |
           aws autoscaling start-instance-refresh \
           --auto-scaling-group-name="${{ vars.AUTOSCALING_GROUP_NAME }}"
+
