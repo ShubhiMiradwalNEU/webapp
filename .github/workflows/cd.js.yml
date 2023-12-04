@@ -37,7 +37,6 @@ jobs:
           AMI_ID=$(jq -r '.builds[-1].artifact_id' manifest.json | cut -d ":" -f2)
           echo $AMI_ID
           echo "AMI_ID=$AMI_ID" >> "$GITHUB_OUTPUT"
-
   auto_deployment:
     runs-on: ubuntu-latest
     needs: [ami_build]
@@ -45,14 +44,12 @@ jobs:
       AMI_ID: ${{ needs.ami_build.outputs.AMI_ID || vars.AMI_ID }}
     steps:
       - uses: actions/checkout@v3
-
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
           aws-region: us-west-2
-
       - name: Check AMI ID
         run: echo $AMI_ID
 
