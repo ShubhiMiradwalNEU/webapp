@@ -64,4 +64,3 @@ jobs:
         run: |
           aws autoscaling start-instance-refresh \
           --auto-scaling-group-name="${{vars.AUTOSCALING_GROUP_NAME}}"
-
