@@ -64,7 +64,7 @@ jobs:
       - name: Refresh Launch Template
         run: |
           aws ec2 create-launch-template-version --no-cli-pager \
-          --launch-template-data '{"ImageId":"'"${{ env.AMI_ID }}""'"}' \
+          --launch-template-data "{\"ImageId\":\"${AMI_ID}\"}" \
           --source-version 1 --launch-template-name ${{ vars.LAUNCH_TEMPLATE_NAME }}
 
       - name: Refresh Auto Scaling Group Instance
