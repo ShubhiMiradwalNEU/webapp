@@ -39,6 +39,7 @@ router.patch('/demo/assignment/:id', (req, res) => {
 });
 
 router.post('/demo/assignment/:id/submission', (req, res) => {
+
     assignmentController.submissionDetails(req, res);
 });
 
