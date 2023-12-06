@@ -11,34 +11,34 @@ const client = new StatsD({
     port: 8125
 });
 
-router.get('/v3/assignment', (req, res) => {
+router.get('/v4/assignment', (req, res) => {
     assignmentController.getAssignment(req,res);
 });
 
-router.get('/v3/assignment/:id', (req, res) => {
+router.get('/v4/assignment/:id', (req, res) => {
     assignmentController.getAssignmentById(req, res);
 });
 
-router.post('/v3/assignment', (req, res) => {
+router.post('/v4/assignment', (req, res) => {
      assignmentController.postAssignment(req, res);
 });
 
-router.put('/v3/assignment/:id', (req, res) => {
+router.put('/v4/assignment/:id', (req, res) => {
     assignmentController.updateAssignment(req, res);
 });
 
-router.delete('/v3/assignment/:id', (req,res)=>
+router.delete('/v4/assignment/:id', (req,res)=>
 {
     assignmentController.deleteAssignment(req, res);
 });
 
-router.patch('/v3/assignment/:id', (req, res) => {
+router.patch('/v4/assignment/:id', (req, res) => {
     logger.info("patch Request for assignement is called");
     client.increment("patch-Request-assignemnt")
     res.status(405).end();
 });
 
-router.post('/v3/assignment/:id/submission', (req, res) => {
+router.post('/v4/assignment/:id/submission', (req, res) => {
     assignmentController.submissionDetails(req, res);
 });
 
